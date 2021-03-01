@@ -14,14 +14,25 @@ let dataList = [];
 const _handleSubmit = (router) => {
   return (e) => {
     e.preventDefault();
-    router.go("/index");
+    const data = $("#signin").serialize();
+    $.ajax({
+      url: "/api/users/signin",
+      type: "post",
+      data,
+      success: function (res) {
+        if(res.ret){
+          router.go('/index') 
+        }
+      },
+    });
+
   };
-};
+}; 
 
 const _signup = () => {
   const $btnClose = $("#users-close");
   const data = $("#users-form").serialize();
-  console.log("data:", data);
+
   $.ajax({
     url: "/api/users/",
     type: "post",
@@ -82,7 +93,8 @@ const _setPageActive = (index) => {
 };
 
 const index = (router) => {
-  return (req, res, next) => {
+
+  const loadIndex = (res) => {
     res.render(htmlIndex);
     $(window, ".wrapper").resize();
     $("#content").html(usersTpl());
@@ -91,7 +103,7 @@ const index = (router) => {
         url: "/api/users/",
         type: "delete",
         data: {
-          id: $(this).data("id"),
+          id:  $(this).data("id"),
         },
         success() {
           _loadData();
@@ -129,11 +141,33 @@ const index = (router) => {
 
     $('#users-signout').on('click', (e) => {
       e.preventDefault();
-      router.go('/signin');
+      $.ajax({
+        url:'/api/users/signout',
+        success(result){
+          if(result.ret) {
+            location.reload(); 
+          }
+        }
+      });
+      
     });
 
     _loadData();
     $("#users-save").on("click", _signup);
+  }
+
+
+  return (req, res, next) => {
+    $.ajax({
+      url:'/api/users/isAuth',
+      success(result){
+        if(result.ret){
+          loadIndex(res);
+        } else {
+          router.go('/signin')
+        }
+      }
+    }); 
   };
 };
 

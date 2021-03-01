@@ -10,6 +10,16 @@ function encrypt(plainPassword) {
   });
 }
 
+function compare(myPlaintextPassword, hash) {
+  return new  Promise((resolve, reject) => {
+    bcrypt.compare(myPlaintextPassword, hash, function(err, result) {
+      resolve(result); 
+    });
+  } )
+ 
+}
+
 module.exports = {
   encrypt,
+  compare
 };

@@ -1,5 +1,6 @@
 const usersModel = require("../models/users");
-const { encrypt } = require("../utils/tools");
+const { encrypt, compare } = require("../utils/tools");
+ 
 
 const signup = async (req, res) => {
  
@@ -54,8 +55,72 @@ const remove = async (req, res) => {
   }
 };
 
+// user sign in
+const signin = async (req, res) => {
+  const {username, password} = req.body;
+  let result = await usersModel.findUser(username);
+  if(result) {
+    let {password: hash} = result;
+    let compareResult =  await compare(password, hash);
+    if(compareResult) {
+      req.session.username = username;
+      res.render("succ", {
+        data: JSON.stringify({
+          username
+        }), 
+      });
+
+    } else {
+      res.render("fail", {
+        data: JSON.stringify({
+          message: "用户名或密码错误",
+        }),
+      });
+    }
+
+  } else {
+    res.render("fail", {
+      data: JSON.stringify({
+        message: "用户名或密码错误",
+      }),
+    });
+  }
+}
+
+const signout = async (req, res) => {
+  req.session = null;
+  res.render("succ", {
+    data: JSON.stringify({
+      message:"退出登录成功 "
+    }), 
+  });
+}
+
+const isAuth = async (req, res, next) => {
+
+  if(req.session.username){
+    res.render("succ", {
+      data: JSON.stringify({
+         username: req.session.username 
+      }), 
+    });
+   
+  } else {
+    res.render("fail", {
+      data: JSON.stringify({
+        message: "请登录",
+      }),
+    });
+  }
+   
+}
+
+
 module.exports = {
   signup,
   list,
   remove,
+  signin,
+  signout,
+  isAuth
 };

@@ -107,6 +107,11 @@
   "resolved" "https://registry.npm.taobao.org/array-flatten/download/array-flatten-1.1.1.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Farray-flatten%2Fdownload%2Farray-flatten-1.1.1.tgz"
   "version" "1.1.1"
 
+"array-uniq@1.0.2":
+  "integrity" "sha1-X8w3OSB3VyPP1k1lxkvvU7+eum0="
+  "resolved" "https://registry.npm.taobao.org/array-uniq/download/array-uniq-1.0.2.tgz"
+  "version" "1.0.2"
+
 "balanced-match@^1.0.0":
   "integrity" "sha1-ibTRmasr7kneFk6gK4nORi1xt2c="
   "resolved" "http://registry.npm.taobao.org/balanced-match/download/balanced-match-1.0.0.tgz"
@@ -321,6 +326,15 @@
     "cookie" "0.4.0"
     "cookie-signature" "1.0.6"
 
+"cookie-session@^1.4.0":
+  "integrity" "sha1-wyWupoXOucjk/QCwMTpG1Ud0c4A="
+  "resolved" "https://registry.npm.taobao.org/cookie-session/download/cookie-session-1.4.0.tgz"
+  "version" "1.4.0"
+  dependencies:
+    "cookies" "0.8.0"
+    "debug" "2.6.9"
+    "on-headers" "~1.0.2"
+
 "cookie-signature@1.0.6":
   "integrity" "sha1-4wOogrNCzD7oylE6eZmXNNqzriw="
   "resolved" "http://registry.npm.taobao.org/cookie-signature/download/cookie-signature-1.0.6.tgz"
@@ -335,6 +349,14 @@
   "integrity" "sha1-vrQ35wIrO21JAZ0IhmUwPr6cFLo="
   "resolved" "https://registry.npm.taobao.org/cookie/download/cookie-0.4.0.tgz"
   "version" "0.4.0"
+
+"cookies@0.8.0":
+  "integrity" "sha1-EpPOSzkXQKhAbjyYcOgoxLVPP5A="
+  "resolved" "https://registry.npm.taobao.org/cookies/download/cookies-0.8.0.tgz"
+  "version" "0.8.0"
+  dependencies:
+    "depd" "~2.0.0"
+    "keygrip" "~1.1.0"
 
 "core-util-is@~1.0.0":
   "integrity" "sha1-tf1UIgqivFq1eqtxQMlAdUUDwac="
@@ -406,6 +428,11 @@
   "integrity" "sha1-m81S4UwJd2PnSbJ0xDRu0uVgtak="
   "resolved" "http://registry.npm.taobao.org/depd/download/depd-1.1.2.tgz"
   "version" "1.1.2"
+
+"depd@~2.0.0":
+  "integrity" "sha1-tpYWPMdXVg0JzyLMj60Vcbeedt8="
+  "resolved" "http://registry.npm.taobao.org/depd/download/depd-2.0.0.tgz"
+  "version" "2.0.0"
 
 "destroy@~1.0.4":
   "integrity" "sha1-l4hXRCxEdJ5CBmE+N5RiBYJqvYA="
@@ -818,6 +845,13 @@
   "resolved" "https://registry.npm.taobao.org/kareem/download/kareem-2.3.2.tgz"
   "version" "2.3.2"
 
+"keygrip@~1.1.0":
+  "integrity" "sha1-hxsWgdXhWcYqRFsMdLYV4JF+ciY="
+  "resolved" "https://registry.npm.taobao.org/keygrip/download/keygrip-1.1.0.tgz"
+  "version" "1.1.0"
+  dependencies:
+    "tsscmp" "1.0.6"
+
 "keyv@^3.0.0":
   "integrity" "sha1-7MIoSG9pmR5J6UdkhaW+Ho/FxNk="
   "resolved" "https://registry.npm.taobao.org/keyv/download/keyv-3.1.0.tgz?cache=0&sync_timestamp=1600337477435&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fkeyv%2Fdownload%2Fkeyv-3.1.0.tgz"
@@ -1128,7 +1162,7 @@
   dependencies:
     "ee-first" "1.1.1"
 
-"on-headers@~1.0.1":
+"on-headers@~1.0.1", "on-headers@~1.0.2":
   "integrity" "sha1-dysK5qqlJcOZ5Imt+tkMQD6zwo8="
   "resolved" "https://registry.npm.taobao.org/on-headers/download/on-headers-1.0.2.tgz"
   "version" "1.0.2"
@@ -1235,6 +1269,13 @@
   "integrity" "sha1-yzroBuh0BERYTvFUzo7pjUA/PjY="
   "resolved" "https://registry.npm.taobao.org/qs/download/qs-6.5.2.tgz?cache=0&sync_timestamp=1610598174727&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fqs%2Fdownload%2Fqs-6.5.2.tgz"
   "version" "6.5.2"
+
+"randomstring@^1.1.5":
+  "integrity" "sha1-bfBij3XL1ZMpMNn+OrTpVqGFGMM="
+  "resolved" "https://registry.npm.taobao.org/randomstring/download/randomstring-1.1.5.tgz"
+  "version" "1.1.5"
+  dependencies:
+    "array-uniq" "1.0.2"
 
 "range-parser@~1.2.0":
   "integrity" "sha1-PPNwI9GZ4cJNGlW4SADC8+ZGgDE="
@@ -1572,6 +1613,11 @@
   "version" "3.1.0"
   dependencies:
     "nopt" "~1.0.10"
+
+"tsscmp@1.0.6":
+  "integrity" "sha1-hbmVg6w1iexL/vgltQAKqRHWBes="
+  "resolved" "https://registry.npm.taobao.org/tsscmp/download/tsscmp-1.0.6.tgz"
+  "version" "1.0.6"
 
 "type-fest@^0.8.1":
   "integrity" "sha1-CeJJ696FHTseSNJ8EFREZn8XuD0="
