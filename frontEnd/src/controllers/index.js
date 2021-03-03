@@ -1,44 +1,24 @@
 import indexTpl from "../views/index.art";
-import signinTpl from "../views/signin.art";
 import usersTpl from "../views/users.art";
 import usersListTpl from "../views/users-list.art";
-import usersPagesTpl from "../views/users-pages.art";
-// import router from '../routes';
+ 
+import pagination from '../components/pagination';
+import page from '../databus/data';
+ 
 
 const htmlIndex = indexTpl({});
-const htmlSignin = signinTpl({});
-const pageSize = 5;
-let currPage = 1;
+const pageSize = page.pageSize; 
 let dataList = [];
-
-const _handleSubmit = (router) => {
-  return (e) => {
-    e.preventDefault();
-    const data = $("#signin").serialize();
-    $.ajax({
-      url: "/api/users/signin",
-      type: "post",
-      data,
-      success: function (res) {
-        if(res.ret){
-          router.go('/index') 
-        }
-      },
-    });
-
-  };
-}; 
 
 const _signup = () => {
   const $btnClose = $("#users-close");
   const data = $("#users-form").serialize();
-
   $.ajax({
     url: "/api/users/",
     type: "post",
     data,
     success: function (res) {
-      console.log("res:", res);
+      page.setCurrentPage(1);
       _loadData();
     },
   });
@@ -50,110 +30,72 @@ const _loadData = () => {
     url: "/api/users/",
     success(result) {
       dataList = result.data;
-      _pagination(result.data);
-      _list(currPage);
+      pagination(result.data, pageSize, page.currPage);
+      _list(page.currPage);
     },
   });
 };
 
 const _list = (pageNum ) => {
   let start = (pageNum - 1) * pageSize;
-  $("#users-list").html(
-    usersListTpl({
-      data: dataList.slice(start, start + pageSize),
-    })
-  );
+  $("#users-list").html(usersListTpl({data: dataList.slice(start, start + pageSize)}));
 };
 
-const _pagination = (data) => {
-  const total = data.length;
-  const numPages = Math.ceil(total / pageSize);
-  const pageArray = new Array(numPages);
-  const htmlPage = usersPagesTpl({
-    pageArray,
+
+const _methods = () => {
+  // 删除事件绑定
+  $("#users-list").on("click", ".remove", function () {
+    $.ajax({
+      url: "/api/users/",
+      type: "delete",
+      data: {id: $(this).data("id")},
+      success() {
+        _loadData();
+        const isLastPage = Math.ceil(dataList.length / pageSize) === page.currPage;
+        const isLastRecord = dataList.length % pageSize === 1;
+        const notFirstPage = page.currPage > 0;
+        if (isLastPage && isLastRecord && notFirstPage) { page.setCurrentPage(page.currPage - 1); }
+      },
+    });
   });
 
-  $("#users-page").html(htmlPage);
-  _setPageActive(currPage);
-};
+  // 登出事件绑定
+  $('#users-signout').on('click', (e) => {
+    e.preventDefault();
+    $.ajax({
+      url:'/api/users/signout',
+      success(result){
+        if(result.ret) { location.reload(); }
+      }
+    });
+  });
 
-const signin = (router) => {
-  return (req, res, next) => {
-    res.render(htmlSignin);
-    $("#signin").on("submit", _handleSubmit(router));
-  };
-};
+  // 点击保存,提交表单
+  $("#users-save").on("click", _signup);
+}
+ 
+const _subscribe = () => {
+  $('body').on('changeCurrPage', (event, index) => {
+     _list(index);
+  })
+}
 
-const _setPageActive = (index) => {
-  $("#users-page #users-page-list li:not(:first-child,:last-child)")
-    .eq(index - 1)
-    .addClass("active")
-    .siblings()
-    .removeClass("active");
-};
 
 const index = (router) => {
 
   const loadIndex = (res) => {
+    // 渲染首页面
     res.render(htmlIndex);
+    // window resize,让页面撑满屏幕
     $(window, ".wrapper").resize();
+    // 填充中间用户列表
     $("#content").html(usersTpl());
-    $("#users-list").on("click", ".remove", function () {
-      $.ajax({
-        url: "/api/users/",
-        type: "delete",
-        data: {
-          id:  $(this).data("id"),
-        },
-        success() {
-          _loadData();
-          const isLastPage = Math.ceil(dataList.length / pageSize) === currPage;
-          const isLastRecord = dataList.length % pageSize === 1;
-          const notFirstPage = currPage > 0;
-          if (isLastPage && isLastRecord && notFirstPage) { currPage--; }
-        },
-      });
-    });
-
-    $("#users-page").on("click", "#users-page-list li:not(:first-child,:last-child)",function (){
-        const index = $(this).index();
-        _list(index);
-        currPage = index;
-        _setPageActive(index);
-      }
-    );
-    $("#users-page").on("click", "#users-page-list li:first-child", function () {
-        if (currPage > 1) {
-          currPage--;
-          _list(currPage);
-          _setPageActive(currPage);
-        }
-      }
-    );
-    $("#users-page").on( "click", "#users-page-list li:last-child ", function () {
-        if (currPage < Math.ceil(dataList.length / pageSize)) {
-          currPage++;
-          _list(currPage);
-          _setPageActive(currPage);
-        }
-      }
-    );
-
-    $('#users-signout').on('click', (e) => {
-      e.preventDefault();
-      $.ajax({
-        url:'/api/users/signout',
-        success(result){
-          if(result.ret) {
-            location.reload(); 
-          }
-        }
-      });
-      
-    });
-
+    // 初次渲染list
     _loadData();
-    $("#users-save").on("click", _signup);
+    // 页面事件绑定
+    _methods();
+    // 订阅事件
+    _subscribe(); 
   }
 
 
@@ -171,4 +113,4 @@ const index = (router) => {
   };
 };
 
-export { signin, index };
+export { index };

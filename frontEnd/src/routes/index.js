@@ -2,12 +2,12 @@ import SMERouter from 'sme-router';
 
 const router = new SMERouter('root');
 
-
-import {signin, index} from '../controllers';
+import {index} from '../controllers/index';
+import signin from '../controllers/signin';
  
 router.use((req) => {
 
-  $.ajax({
+  $.ajax({ 
     url:'/api/users/isAuth',
     success(result){
       if(result.ret){
@@ -25,7 +25,5 @@ router.route('/', () => {});
 router.route('/signin', signin(router));
 router.route('/index', index(router));
  
-// router.route('/signin', signin);
-
 
 export default router; 

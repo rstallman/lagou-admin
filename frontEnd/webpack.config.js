@@ -15,7 +15,7 @@ module.exports = {
 
   output:{
     path:path.join(__dirname, './dist'),
-    filename:'[name]-[hash:6].js'
+    filename:'[name].js'
   },
  
   
@@ -27,13 +27,11 @@ module.exports = {
         use:{
           loader: 'art-template-loader'
         }
-        
       },
       {
         test: /\.css$/, 
         exclude:/(node_modules)/,
         loaders: ['style-loader','css-loader']
-        
       },
     ],
   }, 
