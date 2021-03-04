@@ -1,23 +1,16 @@
 import SMERouter from 'sme-router';
-
 const router = new SMERouter('root');
-
-import {index} from '../controllers/index';
+import {index} from '../controllers/users/index';
 import signin from '../controllers/signin';
+import {auth as authModel}   from '../models/auth'
  
-router.use((req) => {
-
-  $.ajax({ 
-    url:'/api/users/isAuth',
-    success(result){
-      if(result.ret){
-        router.go('/index');
-      } else {
-        router.go('/signin')
-      }
-    }
-  }); 
-
+router.use( async (req) => {
+  let result = await authModel();
+  if(result.ret){ 
+    router.go('/index');
+  } else {
+    router.go('/signin')  
+  }
 })
 
 router.route('/', () => {});

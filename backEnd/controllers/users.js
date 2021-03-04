@@ -1,5 +1,5 @@
 const usersModel = require("../models/users");
-const { encrypt, compare } = require("../utils/tools");
+const { encrypt, compare, sign, verify } = require("../utils/tools");
  
 
 const signup = async (req, res) => {
@@ -32,7 +32,7 @@ const signup = async (req, res) => {
 
 const list = async (req, res) => {
   const users = await usersModel.findList();
-  res.render("succ", {
+  res.render("succ", { 
     data: JSON.stringify(users),
   });
 };
@@ -62,14 +62,14 @@ const signin = async (req, res) => {
   if(result) {
     let {password: hash} = result;
     let compareResult =  await compare(password, hash);
-    if(compareResult) {
-      req.session.username = username;
+    if(compareResult) {    
+      const token = sign(username);
+      res.set('X-Access-Token', token); 
       res.render("succ", {
         data: JSON.stringify({
           username
         }), 
-      });
-
+      }); 
     } else {
       res.render("fail", {
         data: JSON.stringify({
@@ -77,14 +77,13 @@ const signin = async (req, res) => {
         }),
       });
     }
-
   } else {
     res.render("fail", {
       data: JSON.stringify({
         message: "用户名或密码错误",
       }),
     });
-  }
+  } 
 }
 
 const signout = async (req, res) => {
@@ -97,22 +96,22 @@ const signout = async (req, res) => {
 }
 
 const isAuth = async (req, res, next) => {
-
-  if(req.session.username){
+  let token = req.get('X-Access-Token') 
+  try {
+    let result = verify(token);
     res.render("succ", {
       data: JSON.stringify({
-         username: req.session.username 
+          username: result.username 
       }), 
     });
-   
-  } else {
+  } catch (e) {
     res.render("fail", {
       data: JSON.stringify({
         message: "请登录",
       }),
     });
   }
-   
+  
 }
 
 
