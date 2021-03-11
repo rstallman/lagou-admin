@@ -11,7 +11,8 @@ const _setPageActive = (index) => {
 };
 
 
-const  pagination = (data, pageSize) => {
+const  pagination = (data) => {
+  const pageSize = page.pageSize
   const total = data.length;
   const numPages = Math.ceil(total / pageSize);
   const pageArray = new Array(numPages);

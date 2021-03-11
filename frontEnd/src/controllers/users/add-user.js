@@ -1,4 +1,3 @@
-import page from '../../databus/data'
 import usersAddTpl from '../../views/users-add.art'
 import {usersAdd as usersAddModel} from '../../models/users-add'
  
@@ -8,9 +7,8 @@ export const addUser = () => {
   
   const _save = async () => {
     const data = $("#users-form").serialize();
-    let result =  await usersAddModel(data )
+    let result =  await usersAddModel(data)
     if(result.ret) {
-      page.setCurrentPage(1);
       $('body').trigger('addUser');
     } 
     const $btnClose = $("#users-close");
@@ -18,7 +16,7 @@ export const addUser = () => {
   }
 
   // 点击保存,提交表单
-  $("#users-save").on("click", _save);
+  $("#users-save").off('click').on("click", _save);
 
 };
 

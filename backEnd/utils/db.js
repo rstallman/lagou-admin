@@ -19,7 +19,18 @@ var usersSchema = mongoose.Schema({
 
 var Users  = mongoose.model('users', usersSchema);
 
+const positionsSchema = mongoose.Schema({
+  companyName: String,
+  positionName: String,
+  city: String,
+  createTime: String,
+  salary: String
+})
+
+const Positions = mongoose.model('positions', positionsSchema);
+
 
 module.exports = { 
-  Users
+  Users,
+  Positions
 }
