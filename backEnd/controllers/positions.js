@@ -2,8 +2,9 @@ const postionsModel = require('../models/positions')
 const moment = require('moment')
 
 const add = async (req, res) => {
-  
+
   let result = await postionsModel.add({
+    companyLogo: req.companyLogo,
     ...req.body,
     createTime: moment().format('YYYY年MM月DD日, HH:mm')
   })

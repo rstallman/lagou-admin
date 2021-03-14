@@ -20,6 +20,7 @@ var usersSchema = mongoose.Schema({
 var Users  = mongoose.model('users', usersSchema);
 
 const positionsSchema = mongoose.Schema({
+  companyLogo: String,
   companyName: String,
   positionName: String,
   city: String,
